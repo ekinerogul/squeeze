@@ -1,3 +1,8 @@
+const SAFE_CONTROLS = [
+  1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+  25, 26, 27, 28, 29, 30, 31,
+].map((c) => String.fromCharCode(c));
+
 const JS_KEYWORDS = [
   "function",
   "return",
@@ -11,6 +16,7 @@ const JS_KEYWORDS = [
   "async",
   "await",
   "import",
+  "exports",
   "export",
   "default",
   "class",
@@ -23,31 +29,15 @@ const JS_KEYWORDS = [
   "console",
   "require",
   "module",
-  "exports",
+  "typeof",
+  "throw",
+  "catch",
 ];
-
-function boostFrequency(frequency) {
-  const BOOST = 100;
-
-  for (let i = 0; i < JS_KEYWORDS.length; i++) {
-    const keyword = JS_KEYWORDS[i];
-
-    if (frequency[keyword] === undefined) {
-      frequency[keyword] = BOOST;
-    } else {
-      frequency[keyword] = frequency[keyword] + BOOST;
-    }
-  }
-
-  return frequency;
-}
 
 function replaceKeywords(text) {
   let result = text;
   for (let i = 0; i < JS_KEYWORDS.length; i++) {
-    const keyword = JS_KEYWORDS[i];
-    const replacement = String.fromCharCode(i + 1);
-    result = result.split(keyword).join(replacement);
+    result = result.split(JS_KEYWORDS[i]).join(SAFE_CONTROLS[i]);
   }
   return result;
 }
@@ -55,16 +45,13 @@ function replaceKeywords(text) {
 function restoreKeywords(text) {
   let result = text;
   for (let i = 0; i < JS_KEYWORDS.length; i++) {
-    const replacement = String.fromCharCode(i + 1);
-    const keyword = JS_KEYWORDS[i];
-    result = result.split(replacement).join(keyword);
+    result = result.split(SAFE_CONTROLS[i]).join(JS_KEYWORDS[i]);
   }
   return result;
 }
 
 module.exports = {
   JS_KEYWORDS,
-  boostFrequency,
   replaceKeywords,
   restoreKeywords,
 };
