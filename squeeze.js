@@ -6,6 +6,18 @@ function squeezeCreate(files, options = {}) {
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
 
+    if (file.content.length === 0) {
+      archive.push({
+        fileName: file.name,
+        raw: true,
+        rawContent: "",
+        jsMode: false,
+        originalSize: 0,
+        checksum: 0,
+      });
+      continue;
+    }
+
     let encoded, codeLengths, jsMode;
 
     if (options.jsMode) {
